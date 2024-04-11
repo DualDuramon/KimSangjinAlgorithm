@@ -12,6 +12,9 @@ using namespace std;
 * 
 */
 
+void testtool() {
+    return;
+}
 
 void TestCase() {
     int n = 0;
