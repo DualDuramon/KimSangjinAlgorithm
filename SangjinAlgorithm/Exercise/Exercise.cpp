@@ -1,5 +1,4 @@
 #include<iostream>
-#include<algorithm>
 #include<vector>
 
 
@@ -8,7 +7,7 @@ using namespace std;
 * 알고리즘 및 실습 02분반
 * 2019136003 강윤민
 * 2024년도 1학기 알고리즘및실습 7장
-* 문제 A : FindCycle
+* 문제 A : 주기 찾기
 * 
 */
 
@@ -19,7 +18,7 @@ bool isCycleDFS(std::vector<std::vector<int>>& graph, int startNode, int thisNod
         int nextNode = graph[thisNode][i];
         if (startNode == nextNode) return true;
         
-        if (!visited[nextNode]&& isCycleDFS(graph, startNode, nextNode, visited)) {
+        if (!visited[nextNode] && isCycleDFS(graph, startNode, nextNode, visited)) {
             return true;
         }
     }
