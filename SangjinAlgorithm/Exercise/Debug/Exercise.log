@@ -1,3 +1,4 @@
 ﻿  Exercise.cpp
-D:\GitHub\KimSangjinAlgorithm\SangjinAlgorithm\Exercise\Exercise.cpp(30,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\GitHub\KimSangjinAlgorithm\SangjinAlgorithm\Exercise\Exercise.cpp(18,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\GitHub\KimSangjinAlgorithm\SangjinAlgorithm\Exercise\Exercise.cpp(32,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   Exercise.vcxproj -> D:\GitHub\KimSangjinAlgorithm\SangjinAlgorithm\Debug\Exercise.exe
