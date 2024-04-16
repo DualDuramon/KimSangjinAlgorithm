@@ -1,48 +1,55 @@
-#include<iostream>
-#include<vector>
+ï»¿#include<iostream>
 #include<algorithm>
+#include<vector>
+
 
 using namespace std;
 /*
-* ¾Ë°í¸®Áò ¹× ½Ç½À 02ºĞ¹İ
-* 2019136003 °­À±¹Î
-* 2024³âµµ 1ÇĞ±â ¾Ë°í¸®Áò¹×½Ç½À 6Àå
-* ¹®Á¦ C : wiggleSort
-* ¹è¿­À» ¿À¸§Â÷ ¼øÀ¸·Î Á¤·ÄÇÑ ÈÄ Áß¾Ó°ªº¸´Ù ³ôÀº ºÎºĞÀ» high ºÎºĞ, ³·Àº ºÎºĞÀ» lowºÎºĞÀÌ¶ó ÇÏ¸é
-* low¿¡¼­ ÇÏ³ª, high¿¡¼­ ÇÏ³ª ¼±ÅÃÇØ¼­ Â÷·Ê´ë·Î Ãâ·ÂÇÔ. ÇÏÁö¸¸ Áß¾Ó°ªÂÊ¿¡ Áßº¹µÈ ¼ıÀÚ°¡ ¸ô·ÁÀÖÀ¸¸é
-* low¿¡¼­ Áßº¹µÈ ¼ö¸¦ »ÌÀ»¶© ÃÖ´ëÇÑ ºü¸£°Ô »Ì°í, high¿¡¼­ Áßº¹µÈ ¼ö¸¦ »ÌÀ» ¶© ÃÖ´ëÇÑ ´Ê°Ô »Ì°Ô ÇÏ±â À§ÇØ
-* µÑ ´Ù °¢ ¿µ¿ªÀÇ ³¡¿¡¼­ºÎÅÍ ¼ö »Ì±â¸¦ ÁøÇàÇÑ´Ù. Áßº¹µÈ ¼ö°¡ low¿µ¿ª¿¡¼± ³¡ºÎºĞ¿¡, high¿µ¿ª¿¡¼± Ã³À½ ºÎºĞ¿¡
-* ºĞÆ÷µÇ¾î ÀÖ±â ¶§¹®ÀÌ´Ù.
+* ì•Œê³ ë¦¬ì¦˜ ë° ì‹¤ìŠµ 02ë¶„ë°˜
+* 2019136003 ê°•ìœ¤ë¯¼
+* 2024ë…„ë„ 1í•™ê¸° ì•Œê³ ë¦¬ì¦˜ë°ì‹¤ìŠµ 7ì¥
+* ë¬¸ì œ B : ìµœì†Œê±°ë¦¬ ì°¾ê¸°
+*
 */
+typedef std::pair<int, int> edge;   //edge<ê°€ì¤‘ì¹˜ ê°’, ë„ì°©ë…¸ë“œ>
 
-void WiggleSort(std::vector<int>& vec) {
+int Dijkstra(std::vector<std::vector<edge>>& graph, int distNode) {
 
-    std::vector<int> wiggle(vec);   //wiggle ¸¸µå´Â ¹è¿­
 
-    int left = (vec.size() - 1)/ 2; //±âÁ¸ Á¤·ÄµÈ ¹è¿­ÀÇ Áß¾ÓºÎÅÍ ½ÃÀÛ
-    int right = vec.size() - 1;     //±âÁ¸ Á¤·ÄµÈ ¹è¿­ÀÇ ³¡ºÎÅÍ ½ÃÀÛ
 
-    for (int i = 0; i < wiggle.size(); i++) {
-        wiggle[i] = i % 2 == 0 ? vec[left--] : vec[right--];
+    return 0;
+}
+
+void FindShortestWay(std::vector<std::vector<edge>>& graph, std::vector<int>& dist) {
+
+    for (int i = 0; dist.size(); i++) {
+        std::vector<bool> visited(graph.size());
+
     }
 
-    std::cout << wiggle.size() << "\n";     //Ãâ·Â
-    for (int i : wiggle)
-        std::cout << i << " ";
-    std::cout << "\n";
 }
 
 void TestCase() {
-    int n = 0;
-    std::cin >> n;
+    int n = 0, e = 0, startNode = 0;
+    std::cin >> n >> e >> startNode;
 
-    std::vector<int> vec(n);
+    std::vector<std::vector<edge>> graph(n, std::vector<edge>(e));
+    
+    int targets = 0;
+    std::cin >> targets;
+    std::vector<int> dist(targets);
 
-    for (int i = 0; i < n; i++) {
-        std::cin >> vec[i];
+    for (int i = 0; i < targets; i++)
+        std::cin >> dist[i];
+
+
+    for (int i = 0; i < e; i++) {
+        int node = 0, val = 0;
+        std::cin >> node >> val;
+        graph[i].push_back({ val,node });
     }
-    std::sort(vec.begin(), vec.end());
-    WiggleSort(vec);
+
+    FindShortestWay(graph, dist);
 }
 
 int main(void) {
