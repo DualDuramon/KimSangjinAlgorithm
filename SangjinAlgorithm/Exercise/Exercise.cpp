@@ -1,55 +1,57 @@
-ï»¿#include<iostream>
-#include<algorithm>
+#include<iostream>
 #include<vector>
 
 
 using namespace std;
 /*
-* ì•Œê³ ë¦¬ì¦˜ ë° ì‹¤ìŠµ 02ë¶„ë°˜
-* 2019136003 ê°•ìœ¤ë¯¼
-* 2024ë…„ë„ 1í•™ê¸° ì•Œê³ ë¦¬ì¦˜ë°ì‹¤ìŠµ 7ì¥
-* ë¬¸ì œ B : ìµœì†Œê±°ë¦¬ ì°¾ê¸°
-*
+* ¾Ë°í¸®Áò ¹× ½Ç½À 02ºĞ¹İ
+* 2019136003 °­À±¹Î
+* 2024³âµµ 1ÇĞ±â ¾Ë°í¸®Áò¹×½Ç½À 7Àå
+* ¹®Á¦ A : ÁÖ±â Ã£±â
+* 
 */
-typedef std::pair<int, int> edge;   //edge<ê°€ì¤‘ì¹˜ ê°’, ë„ì°©ë…¸ë“œ>
 
-int Dijkstra(std::vector<std::vector<edge>>& graph, int distNode) {
-
-
-
-    return 0;
+bool isCycleDFS(std::vector<std::vector<int>>& graph, int startNode, int thisNode, std::vector<bool>& visited) {
+    visited[thisNode] = true;
+    
+    for (int i = 0; i < graph[thisNode].size(); i++) {
+        int nextNode = graph[thisNode][i];
+        if (startNode == nextNode) return true;
+        
+        if (!visited[nextNode] && isCycleDFS(graph, startNode, nextNode, visited)) {
+            return true;
+        }
+    }
+    return false;
 }
 
-void FindShortestWay(std::vector<std::vector<edge>>& graph, std::vector<int>& dist) {
 
-    for (int i = 0; dist.size(); i++) {
-        std::vector<bool> visited(graph.size());
-
+void FindCycle(std::vector<std::vector<int>>& graph) {
+    
+    for (int i = 0; i < graph.size(); i++) {
+        std::vector<bool>visited(graph.size(), false);
+        if (isCycleDFS(graph, i, i, visited)) {
+            std::cout << "true\n";
+            return;
+        }
     }
-
+    std::cout << "false\n";
 }
 
 void TestCase() {
-    int n = 0, e = 0, startNode = 0;
-    std::cin >> n >> e >> startNode;
+    int n = 0, e = 0;
+    std::cin >> n >> e;
 
-    std::vector<std::vector<edge>> graph(n, std::vector<edge>(e));
-    
-    int targets = 0;
-    std::cin >> targets;
-    std::vector<int> dist(targets);
-
-    for (int i = 0; i < targets; i++)
-        std::cin >> dist[i];
-
+    std::vector<std::vector<int>> graph(n, std::vector<int>());
 
     for (int i = 0; i < e; i++) {
-        int node = 0, val = 0;
-        std::cin >> node >> val;
-        graph[i].push_back({ val,node });
+        int node1 = 0, node2 = 0;
+        std::cin >> node1 >> node2;
+        graph[node1].push_back(node2);
     }
 
-    FindShortestWay(graph, dist);
+    FindCycle(graph);
+
 }
 
 int main(void) {
