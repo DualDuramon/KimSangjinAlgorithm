@@ -1,57 +1,71 @@
 #include<iostream>
 #include<vector>
-
+#include<queue>
+#include<cmath>
+#include<climits>
 
 using namespace std;
 /*
 * 알고리즘 및 실습 02분반
 * 2019136003 강윤민
 * 2024년도 1학기 알고리즘및실습 7장
-* 문제 A : 주기 찾기
-* 
+* 문제 B : 최단거리 찾기
+* 우선순위 큐를 이용한 다익스트라 구현
 */
 
-bool isCycleDFS(std::vector<std::vector<int>>& graph, int startNode, int thisNode, std::vector<bool>& visited) {
-    visited[thisNode] = true;
-    
-    for (int i = 0; i < graph[thisNode].size(); i++) {
-        int nextNode = graph[thisNode][i];
-        if (startNode == nextNode) return true;
-        
-        if (!visited[nextNode] && isCycleDFS(graph, startNode, nextNode, visited)) {
-            return true;
+typedef std::pair<int, int> edge;   //pair<가중치, 도착노드>
+
+void Dijkstra(std::vector<std::vector<edge>>& graph, std::vector<int>& destVec, int startNode){
+
+    std::vector<int> distance(graph.size(), INT_MAX);
+    std::priority_queue<int> dijkQ;
+    std::vector<bool> visited(graph.size(), false);
+  
+    dijkQ.push(startNode);
+    distance[startNode] = 0;
+
+    while (!dijkQ.empty()) {
+        int nowNode = dijkQ.top();
+        visited[nowNode] = true;
+        dijkQ.pop();
+
+        for (edge e : graph[nowNode]) {
+            int nextNode = e.second;
+            int nextCost = e.first;
+
+            if (distance[nextNode] > distance[nowNode] + nextCost) {
+                distance[nextNode] = distance[nowNode] + nextCost;
+                dijkQ.push(e.second);
+            }
         }
     }
-    return false;
-}
 
-
-void FindCycle(std::vector<std::vector<int>>& graph) {
-    
-    for (int i = 0; i < graph.size(); i++) {
-        std::vector<bool>visited(graph.size(), false);
-        if (isCycleDFS(graph, i, i, visited)) {
-            std::cout << "true\n";
-            return;
-        }
+    for (int i = 0; i < destVec.size(); i++) {
+        std::cout << (distance[destVec[i]] == INT_MAX ? -1 : distance[destVec[i]]) << " ";
     }
-    std::cout << "false\n";
+    std::cout << "\n";
 }
+
 
 void TestCase() {
-    int n = 0, e = 0;
-    std::cin >> n >> e;
+    int n = 0, e = 0, startNode = 0, arrNodeNum = 0;
+    std::cin >> n >> e >> startNode >> arrNodeNum;
 
-    std::vector<std::vector<int>> graph(n, std::vector<int>());
+    std::vector<std::vector<edge>> graph(n, std::vector<edge>());   //가중치 그래프
+    std::vector<int> destVec(arrNodeNum);       //목적지노드배열
 
-    for (int i = 0; i < e; i++) {
-        int node1 = 0, node2 = 0;
-        std::cin >> node1 >> node2;
-        graph[node1].push_back(node2);
+    for (int i = 0; i < arrNodeNum; i++) {
+        std::cin >> destVec[i];
     }
 
-    FindCycle(graph);
+    for (int i = 0; i < e; i++) {
+        int node1, node2, cost;
+        std::cin >> node1 >> node2 >> cost;
 
+        graph[node1].push_back({ cost,node2 });
+    }
+
+    Dijkstra(graph, destVec, startNode);
 }
 
 int main(void) {
