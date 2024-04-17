@@ -13,85 +13,79 @@ using namespace std;
 * BFS를 사용하는 문제
 */
 
-void findShortcutWord(std::vector<std::vector<bool>>& graph, std::vector<string>& dictionary, int startIdx, string word, string destWord) {
-
-    std::vector<bool> visited(dictionary.size(), false);
-    std::vector<int> dist(dictionary.size(), INT_MAX);
-    std::queue<int> queue;
-    queue.push(startIdx);
-    dist[startIdx] = 0;
-
-    while (!queue.empty()) {
-        int nowNode = queue.front();
-        visited[nowNode] = true;
-        queue.pop();
-
-        for (int i = 0; i < graph[nowNode].size(); i++) {
-            if (graph[nowNode][i] && !visited[i]) {
-                if (dist[i] > dist[nowNode] + 1) {
-                    dist[i] = dist[nowNode] + 1;
-                    visited[i] = false;
-                }
-                queue.push(i);
-            }
-        }
-    }
-
-}
-
 int compareTwoWord(string str1, string str2) {
     int counter = 0;
-    for (int idx = 0; idx < str1.size(); idx++) {
+    for (size_t idx = 0; idx < str1.size() && counter < 2; idx++) {
         if (str1[idx] != str2[idx]) counter++;
     }
 
     return counter;
 }
 
-void TestCase() {
-    bool notInclude = true;
-    int dictSize = 0;
-    string word = "", destWord = "";
-    std::cin >> word >> destWord >> dictSize;
+void findShortcutWord(std::vector<string>& dictionary, string word, int destWordIdx) {
+    std::vector<bool> visited(dictionary.size(), false);
+    std::vector<int> dist(dictionary.size(), INT_MAX);
+    std::queue<int> queue;
 
-    std::vector<string>dictionary(dictSize + 1);
-    dictionary[0] = word;
+    queue.push(destWordIdx);
+    dist[destWordIdx] = 0;
+    visited[destWordIdx] = true;
 
-    //단어배열 생성
-    for (int i = 1; i < dictionary.size(); i++) {
-        std::cin >> dictionary[i];
-        if (notInclude && dictionary[i] == destWord) 
-            notInclude = false;
-    }
+    while (!queue.empty()) {
+        int nowNode = queue.front();
+        queue.pop();
 
-    if (notInclude) { //끝단어가 사전에 없을 경우
-        std::cout << -1 << "\n";
-        return;
-    }
-
-    //시작위치 지정
-    int startIdx = 0;
-    for (int i = 0; i < dictionary.size(); i++) {
-        int count = compareTwoWord(destWord, dictionary[i]);
-        if (count == 0 || 1) {
-            startIdx = i;
-            break;
+        int counter = compareTwoWord(dictionary[nowNode], word);
+        if (counter == 1) {
+            std::cout << dist[nowNode] + 1 << "\n";
+            return;
         }
-    }
+        else if (counter == 0) {
+            std::cout << dist[nowNode] << "\n";
+            return;
+        }
 
-    //그래프 초기화
-    std::vector<std::vector<bool>>graph(dictSize + 1, std::vector<bool>(dictSize + 1, false));
-
-    for (int i = 0; i < graph.size(); i++) {
-        for (int j = i; j < graph[i].size(); j++) {
-            if (compareTwoWord(dictionary[i], dictionary[j]) == 1) {
-                graph[i][j] = graph[j][i] = true;
+        for (size_t i = 0; i < dictionary.size(); i++) {
+            if (!visited[i] && compareTwoWord(dictionary[nowNode], dictionary[i]) == 1) {
+                dist[i] = dist[nowNode] + 1;
+                visited[i] = true;
+                queue.push(i);
             }
         }
     }
 
+    std::cout << -1 << "\n";
+}
 
-    //findShortcutWord(graph, dictionary, startIdx, word, destWord);
+
+void TestCase() {
+    int dictSize = 0;
+    string word = "", destWord = "";
+    std::cin >> word >> destWord >> dictSize;
+
+    std::vector<string>dictionary(dictSize);
+
+
+    //단어배열 생성
+    for (size_t i = 0; i < dictionary.size(); i++) {
+        std::cin >> dictionary[i];
+    }
+
+    int destWordIdx = -1;
+    for (size_t idx = 0; idx < dictionary.size(); idx++) {
+        if (dictionary[idx] == destWord) {
+            destWordIdx = idx;
+            break;
+        }
+    }
+
+    if (destWordIdx == -1) { //끝단어가 사전에 없을 경우
+        std::cout << -1 << "\n";
+        return;
+    }
+
+
+    findShortcutWord(dictionary, word, destWordIdx);
 }
 
 int main(void) {
