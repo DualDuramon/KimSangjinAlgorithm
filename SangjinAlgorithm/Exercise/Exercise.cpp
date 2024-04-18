@@ -13,7 +13,7 @@ using namespace std;
 * BFS를 사용하는 문제
 */
 
-int compareTwoWord(string str1, string str2) {
+int compareTwoWord(string& str1, string& str2) {
     int counter = 0;
     for (size_t idx = 0; idx < str1.size() && counter < 2; idx++) {
         if (str1[idx] != str2[idx]) counter++;
@@ -22,7 +22,7 @@ int compareTwoWord(string str1, string str2) {
     return counter;
 }
 
-void findShortcutWord(std::vector<string>& dictionary, string word, int destWordIdx) {
+void findShortcutWord(std::vector<string>& dictionary, string& word, int destWordIdx) {
     std::vector<bool> visited(dictionary.size(), false);
     std::vector<int> dist(dictionary.size(), INT_MAX);
     std::queue<int> queue;
@@ -31,23 +31,36 @@ void findShortcutWord(std::vector<string>& dictionary, string word, int destWord
     dist[destWordIdx] = 0;
     visited[destWordIdx] = true;
 
+    int counter = compareTwoWord(dictionary[destWordIdx], word);
+    if (counter == 1) {
+        std::cout << dist[destWordIdx] + 1 << "\n";
+        return;
+    }
+    else if (counter == 0) {
+        std::cout << dist[destWordIdx] << "\n";
+        return;
+    }
+
+
     while (!queue.empty()) {
         int nowNode = queue.front();
         queue.pop();
 
-        int counter = compareTwoWord(dictionary[nowNode], word);
-        if (counter == 1) {
-            std::cout << dist[nowNode] + 1 << "\n";
-            return;
-        }
-        else if (counter == 0) {
-            std::cout << dist[nowNode] << "\n";
-            return;
-        }
-
         for (size_t i = 0; i < dictionary.size(); i++) {
             if (!visited[i] && compareTwoWord(dictionary[nowNode], dictionary[i]) == 1) {
+
                 dist[i] = dist[nowNode] + 1;
+
+                int counter = compareTwoWord(dictionary[i], word);
+                if (counter == 1) {
+                    std::cout << dist[i] + 1 << "\n";
+                    return;
+                }
+                else if (counter == 0) {
+                    std::cout << dist[i] << "\n";
+                    return;
+                }
+
                 visited[i] = true;
                 queue.push(i);
             }
