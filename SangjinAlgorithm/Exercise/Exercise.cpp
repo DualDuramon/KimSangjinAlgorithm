@@ -1,74 +1,76 @@
 #include<iostream>
 #include<vector>
-#include<unordered_set>
-#include<queue>
-#include<cmath>
-#include<climits>
+#include<algorithm>
 
 using namespace std;
 /*
 * 알고리즘 및 실습 02분반
 * 2019136003 강윤민
-* 2024년도 1학기 알고리즘및실습 7장
-* 문제 C : 최적의 변환 순서 찾기
-* BFS를 사용하는 문제
+* 2024년도 1학기 알고리즘및실습 8장
+* 문제 A : 마감시간이 있는 최적의 스케쥴 짜기
+* 
 * 
 */
-typedef std::pair<string, int> node; //pair <단어, 거리>
 
-int findShortcutWord(std::unordered_set<string>& dictionary, string& word, string& destWord) {
-    std::queue<node> queue;
+//typedef std::pair<int, int> work;   //work = pair<이득, 종료시간>
 
-    queue.push(std::make_pair(word, 0));
-    dictionary.erase(word);
+struct work {
+    int id = 0;
+    int benefit = 0;
+    int endTime = 0;
 
-
-    while (!queue.empty()) {
-        string nowWord = queue.front().first;
-        int nowLength = queue.front().second;
-        queue.pop();
-
-        if (nowWord == destWord) { 
-            return nowLength;
-        }
-
-        for (size_t idx = 0; idx < nowWord.size(); idx++) {
-            char originCh = nowWord[idx];
-
-            for (char ch = 'a'; ch <= 'z'; ch++) {
-                nowWord[idx] = ch;
-                if (dictionary.find(nowWord) != dictionary.end()) {
-                    dictionary.erase(nowWord);
-                    queue.push(std::make_pair(nowWord, nowLength + 1));
-                }
-            }
-            nowWord[idx] = originCh;
-        }
+    bool operator<(const work& w) {
+        if (endTime == w.endTime)
+            return id < w.id;
+        else
+            return endTime < w.endTime;
     }
-    return -1;
+};
+
+bool isPossible(std::vector<work>& k) {
+    std::sort(k.begin(), k.end());
+
+    for (int idx = 0; idx < k.size() - 1; idx++) {
+        if (k[idx].endTime >= k[idx + 1].endTime) return false;
+    }
+
+    return true;
 }
 
 
+void scheduling(std::vector<work>& vec) {
+    std::vector<work> schedule;
+
+    schedule.push_back(vec[0]);
+
+    for (int i = 1; i < vec.size(); i++) {
+        std::vector<work> k = schedule;
+        k.push_back(vec[i]);
+        if (isPossible(k)) schedule = k;
+    }
+
+    for (auto& k : schedule)
+        std::cout << k.id << " ";
+    std::cout << "\n";
+
+}
+
 void TestCase() {
-    int dictSize = 0;
-    string word = "", destWord = "";
-    std::cin >> word >> destWord >> dictSize;
+    int n{ 0 };
+    std::cin >> n;
 
-    std::unordered_set<string> dictionary;
+    std::vector<work>vec(n);
 
-    //단어사전 생성(해쉬set)
-    for (size_t i = 0; i < dictSize; i++) {
-        string str;
-        std::cin >> str;
-        dictionary.insert(str);
+    for (int i = 0; i < n; i++) {
+        vec[i].id = i + 1;
+        std::cin >> vec[i].endTime >> vec[i].benefit;
     }
 
-    if (dictionary.find(destWord) == dictionary.end()) {
-        std::cout << "-1\n";
-        return;
-    }
+    std::sort(vec.begin(), vec.end(), [](work a, work b) { return a.benefit > b.benefit; });
 
-    std::cout << findShortcutWord(dictionary, word, destWord) << "\n";
+
+    scheduling(vec);
+
 }
 
 int main(void) {
