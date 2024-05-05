@@ -13,16 +13,21 @@ using namespace std;
 * 문제 B : 가장 큰 수 만들기
 * 
 */
-std::string MaxNumber(std::vector<string>& nums) {
-    string ans = "";
-    
-    for (auto str : nums) {
-        ans += str;
-    }
+bool compareStr (string& target, string& str) {
+    if (target == str) return false;
 
-    return ans;
+    return target + str > str + target;
 }
 
+
+void MaxNumber(std::vector<string>& nums) { 
+
+    std::sort(nums.begin(), nums.end(), compareStr);
+
+    for (auto i : nums)
+        std::cout << i;
+    std::cout << "\n";
+}
 
 
 void TestCase() {
@@ -34,9 +39,7 @@ void TestCase() {
     for (int i = 0; i < n; i++) 
         std::cin >> nums[i];
 
-    std::sort(nums.begin(), nums.end());
-
-    //std::cout << MaxNumber(nums) << "\n";
+    MaxNumber(nums);
 }
 
 int main(void) {
