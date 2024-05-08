@@ -12,8 +12,12 @@ using namespace std;
 * 우선순위 큐를 이용한 Prim 알고리즘 이용
 *
 */
+typedef std::pair<int, int> edge; //tuple<도착노드 , 가중치>
 
-int prim() {
+int prim(std::vector<std::vector<edge>> graph, int startNode, int nodeSize) {
+    
+    std::vector<bool> visited(nodeSize, false);
+    std::vector<int> score(nodeSize, 100);  //100 = INT_MAX
 
 
 
@@ -21,11 +25,19 @@ int prim() {
 }
 
 void TestCase() {
-    int n{ 0 };
-    std::cin >> n;
+    int n{ 0 }, e{ 0 };
+    std::cin >> n >> e;
 
+    std::vector<std::vector<edge>>graph(n, std::vector<edge>());
 
+    for (int i = 0; i < e; i++) {
+        int s, e, w;
+        std::cin >> s >> e >> w;
+        graph[s].push_back(std::make_pair(e, w));
+    }
 
+    int answer = prim(graph, 0, n);
+    
 }
 
 int main(void) {
