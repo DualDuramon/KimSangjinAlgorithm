@@ -1,45 +1,31 @@
 #include<iostream>
 #include<vector>
-#include<string>
+#include<queue>
 #include<algorithm>
 
-
 using namespace std;
-
 /*
 * 알고리즘 및 실습 02분반
 * 2019136003 강윤민
-* 2024년도 1학기 알고리즘및실습 8장
-* 문제 B : 가장 큰 수 만들기
-* 
+* 2024년도 1학기 알고리즘및실습 9장
+* 문제 A : 가중치 무방향 그래프 최소신장트리 구하기
+* 우선순위 큐를 이용한 Prim 알고리즘 이용
+*
 */
-bool compareStr (string& target, string& str) {
-    if (target == str) return false;
 
-    return target + str > str + target;
+int prim() {
+
+
+
+    return 0;
 }
-
-
-void MaxNumber(std::vector<string>& nums) { 
-
-    std::sort(nums.begin(), nums.end(), compareStr);
-
-    for (auto i : nums)
-        std::cout << i;
-    std::cout << "\n";
-}
-
 
 void TestCase() {
-    int n = 0;
+    int n{ 0 };
     std::cin >> n;
 
-    std::vector<string> nums(n);
 
-    for (int i = 0; i < n; i++) 
-        std::cin >> nums[i];
 
-    MaxNumber(nums);
 }
 
 int main(void) {
