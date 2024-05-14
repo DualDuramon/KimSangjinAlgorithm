@@ -1,53 +1,48 @@
 #include<iostream>
 #include<vector>
-#include<algorithm>
+#include<cmath>
 
 using namespace std;
 /*
 * 알고리즘 및 실습 02분반
 * 2019136003 강윤민
 * 2024년도 1학기 알고리즘및실습 10장
-* 문제 C : 합이 같은 분할 찾기
+* 문제 D : 0/1 배낭문제
 * 테뷸레이션으로 풀어보기
-*   - 주어진 수를 전부 합한 값의 절반이 되는지를 검사하면 됨.
-*   - 합이 홀수이면 절반이 되는 값을 만들 수 없음.
+* 
 */
+typedef std::pair<int, int> item;   // <가치, 크기>
 
+int Knapsack(std::vector<item>& items, int maxWeight) {
 
-bool FindSub(std::vector<int>& vec, int targetNum) {
-    std::vector<bool> table(targetNum + 1, false);
-    table[0] = true;
+    std::vector<std::vector<int>>table(items.size() + 1, std::vector<int>(maxWeight + 1, 0));
 
-    for (int i = 0; i < targetNum; i++) {
-        if (table[i]) {
-            for (int x : vec) {
-                if (i + x <= targetNum) table[i + x] = true;
+    for (int i = 0; i < items.size(); i++) {
+        for (int x = 1; x <= maxWeight; x++) {
+            if (items[i].second > x) table[i + 1][x] = table[i][x];
+            else {
+                table[i+1][x] = std::max(table[i][x], table[i][x - items[i].second] + items[i].first);
             }
         }
     }
 
-    return table[targetNum];
+    return table[items.size()][maxWeight];
 }
 
 
 void TestCase() {
-    int n{ 0 }, m{ 0 };
-    std::cin >> n;
+    int w{ 0 }, n{ 0 };
+    std::cin >> w >> n;
 
-
-    std::vector<int> vec(n, 0);
+    std::vector<item> items(n);
 
     for (int i = 0; i < n; i++) {
-        std::cin >> vec[i];
-        m += vec[i];
+        auto& [val, weight] = items[i];
+        std::cin >> val >> weight;
     }
 
-    if (m % 2 == 1) {
-        std::cout << "false\n";
-        return;
-    }
-
-    std::cout << std::boolalpha << FindSub(vec, m / 2) << "\n";
+    int ans = Knapsack(items, w);
+    std::cout << ans << "\n";
 }
 
 int main(void) {
